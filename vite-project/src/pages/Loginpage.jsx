@@ -1,88 +1,76 @@
-import { useForm } from "react-hook-form";
-import { registerRequest } from "../api/auth";
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import axios from "axios";
 
-function Loginpage() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm();
+export default function Iniciar() {
+  const [formData, setFormData] = useState({ correo: "", contraseña: "" });
+  const [mensaje, setMensaje] = useState("");
 
-  const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:500/api/login", formData);
+      setMensaje("Inicio de sesión exitoso");
+      localStorage.setItem("token", response.data.token);
+    } catch (error) {
+      setMensaje(error.response?.data?.error || "Error al iniciar sesión");
+    }
+  };
 
   return (
-    <div className="flex items-center justify-center h-[calc(100vh-100px)]
-                ">
-      <div className="bg-zinc-800 max-w-md w-full p-10 rounded -md">
+    <>
+     <form
+  onSubmit={handleSubmit}
+  className="max-w-lg mx-auto bg-red-900 p-8 mt-32 rounded-xl shadow-lg border-2 border-blue-400"
+>
+  <h1 className="text-center text-3xl font-bold text-white mb-8">Bienvenido, Inicia Sesión</h1>
+  
+  <div className="mb-6">
+    <label htmlFor="correo" className="block mb-2 text-sm font-medium text-gray-300">Correo:</label>
+    <input
+      type="email"
+      id="correo"
+      name="correo"
+      value={formData.correo}
+      onChange={handleChange}
+      className="w-full p-4 border-2 border-gray-600 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="example@gmail.com"
+      required
+    />
+  </div>
+  
+  <div className="mb-6">
+    <label htmlFor="contraseña" className="block mb-2 text-sm font-medium text-gray-300">Contraseña:</label>
+    <input
+      type="password"
+      id="contraseña"
+      name="contraseña"
+      value={formData.contraseña}
+      onChange={handleChange}
+      className="w-full p-4 border-2 border-gray-600 rounded-lg bg-red-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      required
+    />
+  </div>
+  
+  <button 
+    type="submit" 
+    className="w-full py-3 bg-green-600 text-white font-semibold rounded-lg shadow-lg transition duration-300 ease-in-out hover:bg-green-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
+  >
+    Iniciar Sesión
+  </button>
+  
+  <div className="mt-8 text-center">
+    {mensaje && <p className="text-sm text-green-400 mt-4">{mensaje}</p>}
+    <a href="/" className="text-sm text-blue-400 hover:underline mt-4 inline-block">Volver al Inicio</a>
+    <a href="/recover-password" className="text-sm text-blue-400 hover:underline mt-2 inline-block">¿Olvidaste tu contraseña?</a>
+  </div>
+</form>
 
-        <h1 className=" text-2xl font-bold">Login</h1>
-      
-      <form onSubmit={onSubmit}>
-        {/* Campo Nombre */}
-       
-
-        {/* Campo Correo */}
-        <label htmlFor="correo">Correo</label>
-        <input
-          type="email"
-          {...register("correo", {
-            required: {
-              value: true,
-              message: "El correo es requerido",
-            },
-            pattern: {
-              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Correo no es válido",
-            },
-          })}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md"
-          placeholder="example@mail.com"
-        />
-        {errors.correo && <span>{errors.correo.message}</span>}
-
-        {/* Campo Contraseña */}
-        <label htmlFor="contraseña">Contraseña</label>
-        <input
-          type="password"
-          {...register("contraseña", {
-            required: {
-              value: true,
-              message: "La contraseña es requerida",
-            },
-            minLength: {
-              value: 5,
-              message: "La contraseña debe tener al menos 5 caracteres",
-            },
-            maxLength: {
-              value: 20,
-              message: "La contraseña solo puede tener máximo 20 caracteres",
-            },
-          })}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          placeholder="Contraseña"
-        />
-        {errors.contraseña && <span>{errors.contraseña.message}</span>}
-
-      
-
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">
-          ingresar
-        </button>
-        <a
-          href="/"
-          className="text-center text-sm font-semibold text-decoration-line: underline"
-        >
-          Volver al Inicio
-        </a>
-      </form>
-      </div>
-
-    </div>
+    </>
   );
 }
-
-export default Loginpage;

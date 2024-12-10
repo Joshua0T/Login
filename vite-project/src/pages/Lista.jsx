@@ -1,8 +1,7 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function Lista() {
+export default function Users() {
   const [users, setUsers] = useState([]); // Estado para almacenar los usuarios
   const [loading, setLoading] = useState(true); // Estado para manejar la carga
   const [error, setError] = useState(""); // Estado para manejar errores
@@ -11,7 +10,7 @@ export default function Lista() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem("token");  // Obtener el token del almacenamiento local
-      const response = await axios.get("http://localhost:5000/api/users", {
+      const response = await axios.get("http://localhost:5006/api/users", {
         headers: {
           Authorization: `Bearer ${token}`,  // Enviar el token en los headers
         },
@@ -38,22 +37,26 @@ export default function Lista() {
   }, []);
 
   if (loading) {
-    return <p>Cargando usuarios...</p>;
+    return <p className="text-center text-xl">Cargando usuarios...</p>;
   }
 
   return (
-    <div className="relative overflow-x-auto shadow-md">
-      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-zinc-800">
-        <h2 className="text-xl font-semibold">Lista de Usuarios</h2>
+    <div className="relative overflow-x-auto shadow-xl rounded-lg bg-white dark:bg-zinc-800">
+      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-gray-100 dark:bg-zinc-900 rounded-t-lg">
+        <h2 className="text-2xl font-semibold text-center text-gray-800 dark:text-white ">
+          Lista de Usuarios
+        </h2>
       </div>
-      {error && <p className="text-red-500">{error}</p>} {/* Mostrar el error si ocurre */}
+
+      {error && <p className="text-center text-red-500 font-semibold">{error}</p>} {/* Mostrar el error si ocurre */}
+      
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-800 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-red-800 dark:bg-zinc-700 dark:text-gray-400">
           <tr>
-            <th scope="col" className="px-6 py-3">Nombre</th>
-            <th scope="col" className="px-6 py-3">Correo</th>
-            <th scope="col" className="px-6 py-3">Estado</th>
-            <th scope="col" className="px-6 py-3">Acción</th>
+            <th scope="col" className="px-6 py-3 text-white">Nombre</th>
+            <th scope="col" className="px-6 py-3 text-white">Correo</th>
+            <th scope="col" className="px-6 py-3 text-white">Estado</th>
+            <th scope="col" className="px-6 py-3 text-white">Acción</th>
           </tr>
         </thead>
         <tbody>
@@ -61,14 +64,14 @@ export default function Lista() {
             users.map((user) => (
               <tr
                 key={user._id}
-                className="bg-white border-b dark:bg-zinc-900 dark:border-gray-700 hover:bg-gray-600 dark:hover:bg-zinc-800"
+                className="bg-white border-b dark:bg-zinc-900 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors duration-200"
               >
                 <td className="px-6 py-4">{user.nombre}</td>
                 <td className="px-6 py-4">{user.correo}</td>
                 <td className="px-6 py-4">
                   <div className="flex items-center">
                     <div
-                      className={`h-2.5 w-2.5 rounded-full me-2 ${
+                      className={`h-2.5 w-2.5 rounded-full mr-2 ${
                         user.activo ? "bg-green-500" : "bg-red-500"
                       }`}
                     ></div>{" "}
@@ -78,7 +81,7 @@ export default function Lista() {
                 <td className="px-6 py-4">
                   <a
                     href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
                   >
                     Editar Usuario
                   </a>
@@ -87,7 +90,7 @@ export default function Lista() {
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="text-center py-4">
+              <td colSpan="4" className="text-center py-4 text-gray-500">
                 No hay usuarios disponibles.
               </td>
             </tr>

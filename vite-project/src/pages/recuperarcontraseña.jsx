@@ -10,10 +10,10 @@ export default function RecuperarContraseña() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/forgot-password", { correo });
+      const response = await axios.post("http://localhost:5006/api/forgot-password", { correo });
       setMensaje(response.data.message);
       // Opcional: redirigir tras el envío exitoso
-      navigate("/confirmacion"); // Cambia "#" por una ruta válida, como "/confirmacion"
+      navigate("/reset"); // Cambia "#" por una ruta válida, como "/confirmacion"
     } catch (error) {
       setMensaje(error.response?.data?.error || "Error al enviar la solicitud");
     }

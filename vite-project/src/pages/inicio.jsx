@@ -23,6 +23,7 @@ export default function Iniciar() {
 
   return (
     <>
+    
       <form
         onSubmit={handleSubmit}
         className="max-w-sm mx-auto bg-zinc-900 drop-shadow-xl p-10 mt-28 rounded-sm"
@@ -59,17 +60,17 @@ export default function Iniciar() {
           />
         </div>
         <button 
-          type="submit" 
-          className="relative px-4 py-2 font-semibold text-black bg-green-600 rounded-lg shadow-md transition-transform transform duration-300 ease-in-out hover:translate-y-1 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-        >
-          Iniciar Sesión
-        </button>
-
-        {mensaje && <p className="text-center text-sm text-green-500 mt-4">{mensaje}</p>}
-        <br />
-        <a href="/" className="text-center text-sm font-semibold text-decoration-line: underline">Volver al Inicio</a>
-        <br />
-        <a href="/recuperar" className="text-sm text-blue-500 hover:underline">¿Olvidaste tu contraseña?</a>
+    type="submit" 
+    className="w-full py-3 bg-green-600 text-white font-semibold rounded-lg shadow-lg transition duration-300 ease-in-out hover:bg-green-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
+  >
+    Iniciar Sesión
+  </button>
+  
+  <div className="mt-8 text-center">
+    {mensaje && <p className="text-sm text-green-400 mt-4">{mensaje}</p>}
+    <a href="/" className="text-sm text-blue-400 hover:underline mt-4 inline-block">Volver al Inicio</a>
+    <a href="/recover-password" className="text-sm text-blue-400 hover:underline mt-2 inline-block">¿Olvidaste tu contraseña?</a>
+  </div>
       </form>
     </>
   );
